@@ -2,45 +2,27 @@ import sys
 import os
 
 
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(root_dir)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(BASE_DIR)
-
 root_dir_content = os.listdir(BASE_DIR)
-PROJECT_DIR_NAME = 'yatube_api'
-
+HOMEWORK_FILENAME = 'homework.py'
+# проверяем, что в корне репозитория лежит файл с домашкой
 if (
-        PROJECT_DIR_NAME not in root_dir_content
-        or not os.path.isdir(os.path.join(BASE_DIR, PROJECT_DIR_NAME))
+        HOMEWORK_FILENAME not in root_dir_content
+        or os.path.isdir(os.path.join(BASE_DIR, HOMEWORK_FILENAME))
 ):
     assert False, (
-        f'В директории `{BASE_DIR}` не найдена папка c проектом '
-        f'`{PROJECT_DIR_NAME}`. Убедитесь, что у вас верная структура проекта.'
-    )
-
-MANAGE_PATH = os.path.join(BASE_DIR, PROJECT_DIR_NAME)
-project_dir_content = os.listdir(MANAGE_PATH)
-FILENAME = 'manage.py'
-
-if FILENAME not in project_dir_content:
-    assert False, (
-        f'В директории `{MANAGE_PATH}` не найден файл `{FILENAME}`. '
-        'Убедитесь, что у вас верная структура проекта.'
+        f'В директории `{BASE_DIR}` не найден файл '
+        f'с домашней работой `{HOMEWORK_FILENAME}`. '
     )
 
 pytest_plugins = [
-    'tests.fixtures.fixture_user',
-    'tests.fixtures.fixture_data',
+    'tests.fixtures.fixture_data'
 ]
 
-# test .md
-default_md = '# api_final\napi final\n'
-filename = 'README.md'
-assert filename in root_dir_content, (
-    f'В корне проекта не найден файл `{filename}.`'
-)
+os.environ['PRACTICUM_TOKEN'] = 'sometoken'
+os.environ['TELEGRAM_TOKEN'] = '1234:abcdefg'
+os.environ['TELEGRAM_CHAT_ID'] = '12345'
 
-with open(filename, 'r', errors='ignore') as f:
-    file = f.read()
-    assert file != default_md, (
-        f'Не забудьте оформить `{filename}.`'
-    )
